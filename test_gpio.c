@@ -9,11 +9,12 @@ int in = 0;
 
 void contador(void);
 
+// NOTE: O menor tempo atingido - 100 microsegundos
 int main() {
 
   wiringPiSetup();
 
-  // pinMode(PIN, INPUT);
+  // pinModeAlt(PIN, 2);
 
   wiringPiISR(PIN, INT_EDGE_RISING, &contador);
 
