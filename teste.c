@@ -3,40 +3,19 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include <wiringPi.h>
 
-#define PERIOD 100
-#define LED_PIN 3
+#define LED_PIN 4
 
 void send_byte(char b);
 bool *convert(int n);
 
 int main() {
+  char msg[5] = "Hello";
 
-  wiringPiSetup();
-
-  pinMode(LED_PIN, OUTPUT);
-
-  char *msg = "Hello";
-
-  int msg_length = strlen(msg);
-
-  digitalWrite(LED_PIN, HIGH);
-  delay(1000);
-  while (TRUE) {
-    // START CODE
-    digitalWrite(LED_PIN, LOW);
-    delay(PERIOD);
-
-    // SEND BYTES
-    for (int i = 0; i < msg_length; i++) {
-      send_byte(msg[i]);
-    }
-
-    // STOP CODE
-    digitalWrite(LED_PIN, HIGH);
-    delay(1000);
+  for (int i = 0; i < 5; i++) {
+    send_byte(msg[i]);
   }
+  printf("\n");
 
   return 0;
 }
@@ -46,9 +25,8 @@ void send_byte(char b) {
 
   for (int i = 0; i < 8; i++) {
     printf("%i", *(byte + i));
-    digitalWrite(LED_PIN, *(byte + i));
-    delay(PERIOD);
   }
+
   printf("\n");
 }
 
