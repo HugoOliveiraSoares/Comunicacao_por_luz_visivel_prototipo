@@ -13,10 +13,8 @@ void contador(void);
 int main() {
 
   wiringPiSetup();
-
-  // pinModeAlt(PIN, 2);
-
   wiringPiISR(PIN, INT_EDGE_RISING, &contador);
+  pinModeAlt(PIN, 6);
 
   while (true) {
     // in = digitalRead(PIN);
