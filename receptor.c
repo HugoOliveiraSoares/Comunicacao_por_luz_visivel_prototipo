@@ -5,19 +5,24 @@
 
 #define PIN 3
 #define PERIOD 100
-#define START 11111111
-#define STOP 00000000
 
 bool *get_byte() {
   static bool ret[8];
   for (int i = 0; i < 8; i++) {
     ret[i] = digitalRead(PIN);
-    delay(PERIOD);
+    delay(PERIOD - 1);
   }
   return ret;
 }
 
+void shift_left(bool *b) {
+  for (int i = 1; i < 8; i++) {
+    b[i - 1] = b[i];
+  }
+}
+
 void print_byte(bool *b) {
+  shift_left(b);
   for (int i = 0; i < 8; i++) {
     printf("%i", *(b + i));
   }
@@ -34,7 +39,7 @@ int main() {
   while (TRUE) {
 
     if (digitalRead(PIN) == LOW) {
-      delay(PERIOD);
+      delayMicroseconds(10);
       for (int i = 0; i < 5; i++) {
         print_byte(get_byte());
       }
