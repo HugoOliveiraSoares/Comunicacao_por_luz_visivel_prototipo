@@ -22,11 +22,11 @@ int main() {
   int msg_length = strlen(msg);
 
   digitalWrite(LED_PIN, HIGH);
-  delay(1000);
+  delay(5000);
+  printf("EMISSOR\n");
   while (TRUE) {
     // START CODE
     digitalWrite(LED_PIN, LOW);
-    delay(PERIOD);
 
     // SEND BYTES
     for (int i = 0; i < msg_length; i++) {
@@ -35,7 +35,7 @@ int main() {
 
     // STOP CODE
     digitalWrite(LED_PIN, HIGH);
-    delay(1000);
+    delay(2000);
   }
 
   return 0;
