@@ -17,25 +17,24 @@ int main() {
 
   pinMode(LED_PIN, OUTPUT);
 
-  char *msg = "Hello";
+  char msg[5] = "Hello";
 
-  int msg_length = strlen(msg);
-
+  printf("EMISSOR\n");
   digitalWrite(LED_PIN, HIGH);
   delay(5000);
-  printf("EMISSOR\n");
   while (TRUE) {
     // START CODE
     digitalWrite(LED_PIN, LOW);
+    delayMicroseconds(10);
 
     // SEND BYTES
-    for (int i = 0; i < msg_length; i++) {
+    for (int i = 0; i < 5; i++) {
       send_byte(msg[i]);
     }
 
     // STOP CODE
     digitalWrite(LED_PIN, HIGH);
-    delay(2000);
+    delay(5000);
   }
 
   return 0;
@@ -49,7 +48,7 @@ void send_byte(char b) {
     digitalWrite(LED_PIN, *(byte + i));
     delay(PERIOD);
   }
-  printf("\n");
+  printf(" - %c\n", b);
 }
 
 bool *convert(int n) {
