@@ -8,7 +8,7 @@
 #define PERIOD 100
 #define LED_PIN 3
 
-void send_byte(char b);
+void send_byte(bool *byte);
 bool *convert(int n);
 
 int main() {
@@ -20,35 +20,36 @@ int main() {
   char msg[5] = "Hello";
 
   printf("EMISSOR\n");
-  digitalWrite(LED_PIN, HIGH);
+  digitalWrite(LED_PIN, LOW);
   delay(5000);
   while (TRUE) {
     // START CODE
-    digitalWrite(LED_PIN, LOW);
-    delayMicroseconds(10);
+    digitalWrite(LED_PIN, HIGH);
+    delay(PERIOD);
 
     // SEND BYTES
     for (int i = 0; i < 5; i++) {
-      send_byte(msg[i]);
+      bool *byte = convert((int)msg[i]);
+      send_byte(byte);
+      printf(" - %c\n", msg[i]);
     }
+    printf("%s\n", msg);
 
     // STOP CODE
-    digitalWrite(LED_PIN, HIGH);
+    digitalWrite(LED_PIN, LOW);
     delay(5000);
   }
 
   return 0;
 }
 
-void send_byte(char b) {
-  bool *byte = convert((int)b);
+void send_byte(bool *byte) {
 
   for (int i = 0; i < 8; i++) {
     printf("%i", *(byte + i));
     digitalWrite(LED_PIN, *(byte + i));
     delay(PERIOD);
   }
-  printf(" - %c\n", b);
 }
 
 bool *convert(int n) {
