@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <wiringPi.h>
 
 #define PIN 3
@@ -14,13 +15,12 @@ void shift_left(bool *b) {
 }
 
 bool *get_byte() {
-  static bool ret[8];
+  bool *p = malloc(sizeof(bool) * 8);
   for (int i = 0; i < 8; i++) {
-    ret[i] = digitalRead(PIN);
-    delay(PERIOD - 1);
+    *(p + i) = digitalRead(PIN);
+    delay(PERIOD);
   }
-  shift_left(ret);
-  return ret;
+  return p;
 }
 
 void print_byte(bool *b) {
@@ -33,6 +33,24 @@ void print_byte(bool *b) {
   printf("\n");
 }
 
+void print_msg(bool *b[5]) {
+  shift_left(b[0]);
+  for (int i = 1; i < 5; i++) {
+    shift_left(b[i]);
+    b[i - 1][7] = b[i][0];
+  }
+
+  int a = 0;
+  for (int i = 0; i < 5; i++) {
+    a = 0;
+    for (int y = 0; y < 8; y++) {
+      a += b[i][y] * pow(2, 7 - y);
+    }
+    printf("%c", a);
+  }
+  printf("\n");
+}
+
 int main() {
 
   wiringPiSetup();
@@ -42,10 +60,16 @@ int main() {
   printf("RECEPTOR\n");
   while (TRUE) {
 
-    if (digitalRead(PIN) == LOW) {
-      delayMicroseconds(10);
+    bool *p[5];
+    if (digitalRead(PIN) == HIGH) {
+      delay(PERIOD + 10);
       for (int i = 0; i < 5; i++) {
-        print_byte(get_byte());
+        p[i] = get_byte();
+        print_byte(p[i]);
+      }
+      print_msg(p);
+      for (int i = 0; i < 5; i++) {
+        free(p[i]);
       }
     }
   }
